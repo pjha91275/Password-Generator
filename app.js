@@ -14,11 +14,11 @@ Array.from(checkboxes).forEach(Element=>{
     Element.addEventListener('click',(e)=>{
         if(e.target.innerText == 'radio_button_unchecked'){
             e.target.innerText ='task_alt';
-            e.target.nextElementSibling.nextElementSibling.checked = "true";
+            e.target.nextElementSibling.nextElementSibling.checked = true;
         }
         else{
             e.target.innerText = 'radio_button_unchecked';
-             e.target.nextElementSibling.nextElementSibling.checked = "false";
+             e.target.nextElementSibling.nextElementSibling.checked = false;
         }
     })
 })
@@ -51,22 +51,50 @@ generateBtn.addEventListener('click',function(){
     password.value = password_generated;
 })
 
-function generatePassword(length, uppercase, lowercase, symbols, numbers){
-    let charset = "";
-    let string = "";
+function generatePassword(length, uppercase, lowercase, symbols, numbers) {
+    let allChars = "";
+    let guaranteedChars = [];
 
-    if(uppercase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    if(lowercase) charset += "abcdefghijklmnopqrstuvwxyz";
-    if(symbols) charset += "!@#$%^&*()";
-    if(numbers) charset += "0123456789";
+    const upperSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerSet = "abcdefghijklmnopqrstuvwxyz";
+    const symbolSet = "!@#$%^&*()";
+    const numberSet = "0123456789";
 
-    for(let i = 0 ; i<length ; i++)
-    {
-       string += charset.charAt(Math.floor(Math.random()*charset.length))
+    if (uppercase) {
+        allChars += upperSet;
+        guaranteedChars.push(randomChar(upperSet));
     }
-    
-    return string;
+    if (lowercase) {
+        allChars += lowerSet;
+        guaranteedChars.push(randomChar(lowerSet));
+    }
+    if (symbols) {
+        allChars += symbolSet;
+        guaranteedChars.push(randomChar(symbolSet));
+    }
+    if (numbers) {
+        allChars += numberSet;
+        guaranteedChars.push(randomChar(numberSet));
+    }
+
+    while (guaranteedChars.length < length) {
+        guaranteedChars.push(randomChar(allChars));
+    }
+
+    return guaranteedChars.join('');
 }
+
+function randomChar(str) {
+    return str[Math.floor(Math.random() * str.length)];
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 let copyIcon = document.getElementById('copyIcon');
 
